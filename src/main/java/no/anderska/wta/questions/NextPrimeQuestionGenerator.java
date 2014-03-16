@@ -4,11 +4,13 @@ import no.anderska.wta.game.Question;
 
 import java.util.Random;
 
+import static java.lang.Math.abs;
+
 public class NextPrimeQuestionGenerator extends AbstractQuestionGenerator {
     public static final int NUMBER_OF_QUESTIONS = 10;
     public static final String DESCRIPTION = "Return the next prime. E.g. '8' => '11', '13' -> '17'";
-    public static final int MIN_VALUE = 1;
-    public static final int MAX_VALUE = 1000000;
+    public static final long MIN_VALUE = 1L;
+    public static final long MAX_VALUE = 1000000L;
 
     private final Random random;
 
@@ -23,19 +25,23 @@ public class NextPrimeQuestionGenerator extends AbstractQuestionGenerator {
 
     @Override
     protected Question createQuestion() {
-        int value = random.nextInt(MAX_VALUE - MIN_VALUE) + MIN_VALUE;
+        long value = nextLong(MIN_VALUE, MAX_VALUE);
         return new Question(String.valueOf(value), String.valueOf(getNextPrime(value)));
     }
 
-    private int getNextPrime(int value) {
+    private long nextLong(long minValue, long maxValue) {
+        return abs(random.nextLong()) % (maxValue - minValue) + minValue;
+    }
+
+    long getNextPrime(long value) {
         //noinspection StatementWithEmptyBody
         while (!isPrime(++value)) {
         }
         return value;
     }
 
-    private boolean isPrime(int value) {
-        for (int i = 2; i * i <= value; i++) {
+    boolean isPrime(long value) {
+        for (long i = 2; i * i <= value; i++) {
             if (value % i == 0) {
                 return false;
             }

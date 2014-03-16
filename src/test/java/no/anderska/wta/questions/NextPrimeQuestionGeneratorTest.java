@@ -5,16 +5,23 @@ import org.junit.Test;
 import java.util.Random;
 
 import static no.anderska.wta.questions.assertions.QuestionAssert.assertThat;
-import static org.mockito.Matchers.anyInt;
+import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 public class NextPrimeQuestionGeneratorTest {
+    private final NextPrimeQuestionGenerator generator = new NextPrimeQuestionGenerator();
+
+    @Test
+    public void shouldReturnNextPrimeLong() throws Exception {
+        assertThat(generator.getNextPrime(3842610773L)).isEqualTo(3842611109L);
+    }
+
     @Test
     public void shouldReturnQuestionsBetweenMinAndMax() throws Exception {
         Random random = mock(Random.class);
         AbstractQuestionGenerator generator = new NextPrimeQuestionGenerator(random);
         generator.createQuestion();
-        verify(random).nextInt(eq(NextPrimeQuestionGenerator.MAX_VALUE - NextPrimeQuestionGenerator.MIN_VALUE));
+        verify(random).nextLong();
     }
 
     @Test
@@ -33,7 +40,7 @@ public class NextPrimeQuestionGeneratorTest {
 
     private NextPrimeQuestionGenerator generatorWithNext(int next) {
         Random random = mock(Random.class);
-        when(random.nextInt(anyInt())).thenReturn(next - NextPrimeQuestionGenerator.MIN_VALUE);
+        when(random.nextLong()).thenReturn(next - NextPrimeQuestionGenerator.MIN_VALUE);
         return new NextPrimeQuestionGenerator(random);
     }
 }
